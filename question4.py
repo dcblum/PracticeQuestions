@@ -27,3 +27,91 @@ and the answer would be 3.
 '''
 
 def question4(T,r,n1,n2):
+    map_dict = dict()
+
+    def map_tree(T, p):
+        child_list = []
+        for index in range(len(T[p])):
+            if T[p][index] == 1:
+                child_list.append(index)
+
+
+        # If children were added map the children's children as well
+        if child_list != []:
+            map_dict[p] = child_list
+            for child in child_list:
+                map_tree(T, child)
+
+    map_tree(T, r)
+
+    lca = 'burger'
+
+    def find_lowest_ancestor(map_dict, n1, n2):
+
+        for key in map_dict:
+            if n1 in map_dict[key]:
+                p1 = key
+            else:
+                p1 = r
+            if n2 in map_dict[key]:
+                p2 = key
+            else:
+                p2 = r
+
+        if n1 == n2:
+            return n1
+        else:
+            return find_lowest_ancestor(map_dict, p1, p2)
+
+    return find_lowest_ancestor(map_dict, n1, n2)
+
+
+########################################################################
+#
+#                   TESTS
+#
+########################################################################
+
+
+
+a1 = question4(
+[[0, 1, 0, 0, 0],
+ [0, 0, 0, 0, 0],
+ [0, 0, 0, 0, 0],
+ [1, 0, 0, 0, 1],
+ [0, 0, 0, 0, 0]],
+ 3, 1, 4)
+
+a2 = question4(
+[[0, 1, 1, 0, 0],
+ [0, 0, 0, 1, 1],
+ [0, 0, 0, 0, 0],
+ [0, 0, 0, 0, 0],
+ [0, 0, 0, 0, 0]],
+ 0, 3, 4)
+
+a3 = question4(
+[[0, 1, 1, 0, 0, 0],
+ [0, 0, 0, 1, 1, 0],
+ [0, 0, 0, 0, 0, 0],
+ [0, 0, 0, 0, 0, 0],
+ [0, 0, 0, 0, 0, 1],
+ [0, 0, 0, 0, 0, 0]],
+ 0, 5, 2)
+
+a4 = question4(
+[[0]],
+ 0, 0, 0)
+
+
+print a1
+# 3
+
+print a2
+# 1
+
+print a3
+# 0
+
+print a4
+# 0
