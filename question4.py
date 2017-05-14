@@ -27,9 +27,12 @@ and the answer would be 3.
 '''
 
 def question4(T,r,n1,n2):
-    map_dict = dict()
+    '''Return least common ancestor in Tree T with root r and through n1 and
+    n2'''
 
     def map_tree(T, p):
+        '''generate map of all parents with child_list'''
+        # fill child_list if children of parent exist
         child_list = []
         for index in range(len(T[p])):
             if T[p][index] == 1:
@@ -42,28 +45,42 @@ def question4(T,r,n1,n2):
             for child in child_list:
                 map_tree(T, child)
 
-    map_tree(T, r)
 
-    lca = 'burger'
-
-    def find_lowest_ancestor(map_dict, n1, n2):
+    def map_parents_of_leaf(map_dict, n1):
+        '''Map parents of the first node'''
+        n1_parents = []
 
         for key in map_dict:
             if n1 in map_dict[key]:
-                p1 = key
-            else:
-                p1 = r
-            if n2 in map_dict[key]:
-                p2 = key
-            else:
-                p2 = r
+                n1 = key
+                n1_parents.append(n1)
 
-        if n1 == n2:
-            return n1
+        if n1_parents != []:
+            return map_parents_of_leaf(map_dict, n1) + n1_parents
         else:
-            return find_lowest_ancestor(map_dict, p1, p2)
+            return []
 
-    return find_lowest_ancestor(map_dict, n1, n2)
+    def map_parents_and_compare(map_dict, n2, n1_parents):
+        '''Compare n1_parents map with n2; return first common n2 parent'''
+
+        for key in map_dict:
+            if n2 in map_dict[key]:
+                n2 = key
+
+        if n2 in n1_parents:
+            return n2
+        else:
+            return map_parents_and_compare(map_dict, n2, n1_parents)
+
+
+    map_dict = dict()
+    map_tree(T, r)
+    n1_map = map_parents_of_leaf(map_dict, n1)
+
+    if n1_map == []:
+        return r
+    else:
+        return map_parents_and_compare(map_dict, n2, n1_map)
 
 
 ########################################################################
@@ -88,7 +105,7 @@ a2 = question4(
  [0, 0, 0, 0, 0],
  [0, 0, 0, 0, 0],
  [0, 0, 0, 0, 0]],
- 0, 3, 4)
+ 0, 0, 4)
 
 a3 = question4(
 [[0, 1, 1, 0, 0, 0],
@@ -97,21 +114,32 @@ a3 = question4(
  [0, 0, 0, 0, 0, 0],
  [0, 0, 0, 0, 0, 1],
  [0, 0, 0, 0, 0, 0]],
- 0, 5, 2)
+ 0, 5, 3)
 
 a4 = question4(
 [[0]],
  0, 0, 0)
+
+a5 = question4(
+ [[0, 1, 1, 0, 0],
+  [0, 0, 0, 1, 1],
+  [0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0]],
+  0, 4, 4)
 
 
 print a1
 # 3
 
 print a2
-# 1
+# 0
 
 print a3
-# 0
+# 1
 
 print a4
 # 0
+
+print a5
+# 1
