@@ -1,0 +1,96 @@
+Explanation for each Solution - David Blum
+
+Question 1:
+
+At first I considered generating every combination of t, but that would take too
+long and involve a complex algorithm. I shortly ditched that idea and realized
+I could put all of the letters of t into a list and pull individual letters out.
+If the list became empty then success; it the list didn't have the next letter
+in s then t get completely refilled.
+
+This is a pretty reliable solution.
+
+The longest time it could take is O(n^2) where n is the number of letters in s;
+this would assume s and t are very similar (maybe only a few characters in t not
+present in s, or if t were larger than s). The best case is constant time.
+
+This does take up additional memory, at worst O(n) where n is the number of
+letters in s.
+
+
+Question 2:
+
+I know palindromes! They're the same forwards and backwards; just remove all
+unwanted characters and generate both a forward and backward list of the string.
+Iterate through one of the strings and if there's a palindrome longer than
+encountered earlier update the longest string.
+
+The reason I chose this is because it's the first solution I came across. It's
+not as efficient as it could be; the function will keep iterating through the
+string even if it's no longer possible to have a longer palindrome.
+
+Worst case for time is O(n^2) where n is the number of letters. At the best case
+it's constant time.
+
+Auxillary space worst case is O(n!). This is because lists get generated each at
+a length one less than the previous.
+
+
+Question 3:
+
+I was having a bit of trouble working with this. I decided to write the skeleton
+of what I wanted and filled in the missing code with functions I could later
+write. It follows three main steps:
+
+1) Pick the lowest weight edge
+2) Check if the edge would create a cycle (if it does then remove and do step 1)
+3) Append the edge
+
+I wanted the dictionary to be set up a specific way (it's not necessary but it
+was easier for me to use). The function is recursive and only called once per
+test. It also reduces the numbers of checks for an edge (i.e. AB and BA are both
+given the value AB).
+
+An earlier version of is_cycle would update a list with every possible
+combination that would create a cycle. This was very complicated, took too much
+memory, and was scrapped.
+
+Although not fully optimized, the is_cycle function generates a full map of
+every node that is linked to one vertex. For large maps this could take a lot of
+time and memory; it could be improved if the map generation stopped when the
+other vertex was found.
+
+I imagine this solution is an efficient solution, however the time is still on
+the order of n^2 whereas auxillary space is linear.
+
+
+Question 4:
+
+Again, the design of the problem was a bit confusing so I decided to remap the
+data to something I could more easily work with.
+
+I knew that if I had a dictionary with parents as keys and children as values
+that I could perform a similar method to the depth first search. I mapped all
+the parents of one node and sequentially checked parents of the second node. The
+second node doesn't have to get fully mapped which saves time and space.
+
+It's not in place, however it doesn't take up much additional space. The
+auxillary space is linear.
+
+The worst order of time for searching for the children is O(n^2) where n is the
+distance of the two children nodes that also happen to be the furthest from the
+root. The map generation is at worst O(log(n)) where n is the number of nodes in
+the map(again, similar to the depth first order of time).
+
+
+Question 5:
+
+The solution is to generate a list of all the elements in order and work through
+the list backwards to pick the desired element.
+
+I thought this was pretty straightforward and a simple solution. I really liked
+the implementation of the truth value of a list and utilizing being able to work
+backwards through a list.
+
+Auxilliary space is n; it generates a list of length n. Time is linear; it has
+to generate the list then it's contanst time.

@@ -3,7 +3,7 @@
 # function definition should look like question2(a), and return a string.
 
 def question2(a):
-
+    ''''''
     longest = ''
 
     string = a
@@ -29,7 +29,7 @@ def question2(a):
 
 ########################################################################
 #
-#                   TESTS
+#                   TEST Question2
 #
 ########################################################################
 

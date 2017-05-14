@@ -136,6 +136,12 @@ a3 = {
 'E': [('D', 4)]
 }
 
+a4 = {}
+
+a5 = {
+'A': []
+}
+
 
 print question3(a1)
 # {'A': [('B', 2)],
@@ -161,3 +167,9 @@ print question3(a3)
 # 'D': [('E', 4)],
 # 'E': [('D', 4)]
 # }
+
+print question3(a4)
+# {}
+
+print question3(a5)
+# {}
