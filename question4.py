@@ -31,20 +31,18 @@ def question4(T,r,n1,n2):
     n2'''
 
     def map_tree(T, p):
-        '''generate map of all parents with child_list'''
+        '''generate easier to understand tree'''
         # fill child_list if children of parent exist
         child_list = []
         for index in range(len(T[p])):
             if T[p][index] == 1:
                 child_list.append(index)
 
-
         # If children were added map the children's children as well
         if child_list != []:
             map_dict[p] = child_list
             for child in child_list:
                 map_tree(T, child)
-
 
     def map_parents_of_leaf(map_dict, n1):
         '''Map parents of the first node'''
