@@ -15,6 +15,7 @@ question3(G)
 
 
 def question3(G):
+    '''Return the minimum spanning tree (msg) in G'''
     # make dict of weight (key) and edge (value)
     weight_dict = make_weight_dict(G)
 
@@ -22,30 +23,38 @@ def question3(G):
     keylist = weight_dict.keys()
     keylist.sort()
 
-    # initialize variables for 'while' loop
+    # initialize variables
     mst = dict()
-    edges = 0
-    vertices = len(G)
     edges_list = []
 
-
-    # Stop when (#edges) = (#vertices - 1)
-    #while (edges < vertices):
+    for weight in keylist:
         # Pick the next smallest edge from weight_dict
+        for edge in weight_dict[weight]:
+            # If a cycle is NOT created
+            if not is_cycle(edges_list, edge):
+                edges_list.append(edge)
+                # Append to minimum spanning tree
+                nodeA = edge[0]
+                nodeB = edge[1]
 
-
-        # Check if next weight and edge pair would create a cycle
-
-    return edges_list
-
+                if nodeA not in mst:
+                    mst[nodeA] = [(nodeB, weight)]
+                else:
+                    mst[nodeA].append((nodeB, weight))
+                if nodeB not in mst:
+                    mst[nodeB] = [(nodeA, weight)]
+                else:
+                    mst[nodeB].append((nodeA, weight))
 
     return mst
 
 
-def is_cycle5(edges_list, edge):
-    '''Return True if including 'edge' in dict 'G' creates a cycle'''
+
+def is_cycle(edges_list, edge):
+    '''Return True if including 'edge' in current edges list creates a cycle'''
 
     def generate_node_map(edges_list, node, confirmed_connections):
+        '''Recursively updates connections to node from edges_list'''
 
         potential_connections = []
 
@@ -56,22 +65,22 @@ def is_cycle5(edges_list, edge):
                 if potential_node not in confirmed_connections:
                     potential_connections.append(potential_node)
 
-        # if there are potential connections
+        # Add potential connections and check each of those
         if potential_connections != []:
             confirmed_connections += potential_connections
-            for i in potential_connection:
-                return generate_node_map(edges_list, i, confirmed_connections)
+            for i in potential_connections:
+                confirmed_connections += \
+                generate_node_map(edges_list, i, confirmed_connections)
+
+        return []
 
     nodeA = edge[0]
     nodeB = edge[1]
+    node_map = [nodeA]
 
-    connections = []
+    generate_node_map(edges_list, nodeA, node_map)
 
-    if nodeB in generate_node_map(edges_list, nodeA, connections):
-        return True
-    else:
-        return False
-
+    return nodeB in node_map
 
 def make_weight_dict(G):
 
@@ -109,8 +118,46 @@ a1 = {
 'C': [('A', 6),('B', 5)]
 }
 
+a2 = {
+'A': [('C', 3),('D', 10), ('E', 2)],
+'B': [('D', 6),('E', 1), ('Q', 10)],
+'C': [('A', 3),('D', 4)],
+'D': [('A', 10),('B', 6), ('C', 4), ('E', 4)],
+'E': [('A', 2),('B', 1), ('D', 4)],
+'F': [('D', 5), ('Q', 8)],
+'Q': [('B', 10),('F', 8)]
+}
+
+a3 = {
+'A': [('B', 2),('C', 6)],
+'B': [('A', 2),('C', 5)],
+'C': [('A', 6),('B', 5)],
+'D': [('E', 4)],
+'E': [('D', 4)]
+}
+
+
+print question3(a1)
 # {'A': [('B', 2)],
 # 'B': [('A', 2), ('C', 5)],
 # 'C': [('B', 5)]}
 
-print question3(a1)
+print question3(a2)
+# {
+# 'A': [('E', 2), ('C', 3)],
+# 'B': [('E', 1)],
+# 'C': [('A', 3), ('D', 4)],
+# 'D': [('C', 4), ('F', 5)],
+# 'E': [('B', 1), ('A', 2)],
+# 'F': [('D', 5), ('Q', 8)],
+# 'Q': [('F', 8)]}
+# }
+
+print question3(a3)
+# {
+# 'A': [('B', 2)],
+# 'C': [('B', 5)],
+# 'B': [('A', 2), ('C', 5)],
+# 'D': [('E', 4)],
+# 'E': [('D', 4)]
+# }
